@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Truth Tap</title>
+    <style>
+        body {
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-color: #cde6ff;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        header {
+            text-align: center;
+            padding: 20px;
+            position: relative;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            color: #0b1e5e;
+        }
+
+        .mypage-link {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #fafcff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .mypage-link img {
+            width: 24px;
+            height: 24px;
+        }
+
+        main {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            height: calc(100vh - 100px);
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            margin-top: 30px;
+        }
+
+        .popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            width: 80%;
+            max-width: 500px;
+            display: none;
+            z-index: 1000;
+        }
+
+        .popup h2 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .popup label {
+            font-size: 1rem;
+            margin: 10px 0;
+            display: block;
+            color: #555;
+        }
+
+        .popup .rating {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+        }
+
+        .popup .rating input {
+            display: none;
+        }
+
+        .popup .rating label {
+            cursor: pointer;
+            font-size: 1.2rem;
+            padding: 5px 10px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+        }
+
+        .popup .rating input:checked + label {
+            background-color: #7aa4d0;
+            color: white;
+        }
+
+        .popup button {
+            background-color: #7aa4d0;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .popup button:hover {
+            background-color: #1e62aa;
+        }
+
+        #overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Truth Tap</h1>
+        <div class="mypage-link" onclick="location.href='mypage.html'">
+            <img src="user-icon.png" alt="마이페이지">
+        </div>
+    </header>
+    <main>
+        <div class="input-section">
+            <input type="text" id="urlInput" placeholder="Enter article URL here">
+            <button onclick="checkCredibility()">Check Credibility</button>
+        </div>
+        <div class="score-section">
+            <div id="credibilityScore" class="score">Credibility Score: 0%</div>
+        </div>
+    </main>
+
+    <div id="overlay"></div>
+    <div class="popup" id="popup">
+        <h2>웹사이트 사용 경험 평가</h2>
+        <p>1점(전혀 그렇지 않다) → 5점(매우 그렇다))</p>
+        <form>
+            <label>1. 버튼과 링크를 넣는 박스를 찾는 것이 쉬웠나요?</label>
+            <div class="rating">
+                <input type="radio" id="easy1" name="q1" value="1"><label for="easy1">1</label>
+                <input type="radio" id="easy2" name="q1" value="2"><label for="easy2">2</label>
+                <input type="radio" id="easy3" name="q1" value="3"><label for="easy3">3</label>
+                <input type="radio" id="easy4" name="q1" value="4"><label for="easy4">4</label>
+                <input type="radio" id="easy5" name="q1" value="5"><label for="easy5">5</label>
+            </div>
+            <label>2. 웹사이트 디자인이 직관적이었나요?</label>
+            <div class="rating">
+                <input type="radio" id="intuitive1" name="q2" value="1"><label for="intuitive1">1</label>
+                <input type="radio" id="intuitive2" name="q2" value="2"><label for="intuitive2">2</label>
+                <input type="radio" id="intuitive3" name="q2" value="3"><label for="intuitive3">3</label>
+                <input type="radio" id="intuitive4" name="q2" value="4"><label for="intuitive4">4</label>
+                <input type="radio" id="intuitive5" name="q2" value="5"><label for="intuitive5">5</label>
+            </div>
+            <label>3. 신뢰도 점수를 이해하기 쉬웠나요?</label>
+            <div class="rating">
+                <input type="radio" id="understand1" name="q3" value="1"><label for="understand1">1</label>
+                <input type="radio" id="understand2" name="q3" value="2"><label for="understand2">2</label>
+                <input type="radio" id="understand3" name="q3" value="3"><label for="understand3">3</label>
+                <input type="radio" id="understand4" name="q3" value="4"><label for="understand4">4</label>
+                <input type="radio" id="understand5" name="q3" value="5"><label for="understand5">5</label>
+            </div>
+            <label>4. 웹사이트를 사용하는 동안 전반적인 만족도는 어떠셨나요?</label>
+            <div class="rating">
+                <input type="radio" id="satisfaction1" name="q4" value="1"><label for="satisfaction1">1</label>
+                <input type="radio" id="satisfaction2" name="q4" value="2"><label for="satisfaction2">2</label>
+                <input type="radio" id="satisfaction3" name="q4" value="3"><label for="satisfaction3">3</label>
+                <input type="radio" id="satisfaction4" name="q4" value="4"><label for="satisfaction4">4</label>
+                <input type="radio" id="satisfaction5" name="q4" value="5"><label for="satisfaction5">5</label>
+            </div>
+            <button type="button" onclick="closePopup()">제출</button>
+        </form>
+    </div>
+
+    <script>
+        // Simulate condition for 5+ uses
+        const usageCount = 6; // Example count
+        const popup = document.getElementById('popup');
+        const overlay = document.getElementById('overlay');
+
+        if (usageCount >= 5) {
+            popup.style.display = 'block';
+            overlay.style.display = 'block';
+        }
+
+        function closePopup() {
+            popup.style.display = 'none';
+            overlay.style.display = 'none';
+            alert("설문이 제출되었습니다. 감사합니다!");
+        }
+    </script>
+</body>
+</html>

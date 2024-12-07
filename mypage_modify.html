@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>개인정보 수정</title>
+    <style>
+        /* 기본 스타일 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            background-color: #cde6ff; /* 배경색 추가 */
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            flex-direction: column;
+            font-family: 'Arial', sans-serif;
+            height: 100vh;
+            width: 100%;
+        }
+
+        /* Truth Tap 로고 */
+        .logo {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .logo h1 {
+            font-size: 2.5rem;
+            color: #0b1e5e;
+            cursor: pointer;
+            text-decoration: none; /* 기본 밑줄 제거 */
+        }
+
+        .logo h1:hover {
+            text-decoration: none; /* 마우스 올려도 밑줄 제거 */
+        }
+
+        /* 컨테이너 */
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            background: rgba(255, 255, 255, 0.9); /* 창 배경 반투명 */
+            border-radius: 20px; /* 둥근 모서리 */
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-top: 40px; /* 개인정보 관리 창을 아래로 내림 */
+        }
+
+        /* 헤더 */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            color: #333;
+        }
+
+        .header button {
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 15px;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        .header button:hover {
+            background-color: #388e3c;
+        }
+
+        /* 정보 그리드 */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* 창 너비에 따라 조정 */
+            gap: 20px;
+            padding: 10px;
+        }
+
+        /* 정보 박스 */
+        .info-box {
+            background: #f1f5fb;
+            padding: 20px;
+            height: auto;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .info-box:hover {
+            background-color: #e3eaf6;
+        }
+
+        .info-box label {
+            font-size: 0.75rem;
+            color: #555;
+            margin-bottom: 10px;
+        }
+
+        .info-box input {
+            font-size: 0.9rem;
+            color: #333;
+            border: none;
+            outline: none;
+            width: 100%;
+            text-align: center;
+            background: transparent;
+            display: none; /* 초기에는 보이지 않음 */
+        }
+
+        .info-box select {
+            font-size: 0.9rem;
+            color: #333;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 5px;
+            width: 100%;
+            text-align: center;
+            display: none; /* 초기에는 보이지 않음 */
+        }
+
+        .info-box span {
+            font-size: 0.9rem;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .info-box.editable input {
+            display: block; /* 수정 시 input 표시 */
+        }
+
+        .info-box.editable select {
+            display: block; /* 수정 시 select 표시 */
+        }
+
+        .info-box.editable span {
+            display: none; /* 수정 시 span 숨김 */
+        }
+    </style>
+</head>
+<body>
+    <!-- Truth Tap 로고 -->
+    <div class="logo">
+        <h1 onclick="location.href='main.html'">Truth Tap</h1>
+    </div>
+
+    <div class="container">
+        <!-- 헤더 -->
+        <div class="header">
+            <h1>개인정보 수정</h1>
+            <button onclick="saveChanges()">저장</button>
+        </div>
+
+        <!-- 정보 그리드 -->
+        <div class="info-grid">
+            <div class="info-box" onclick="enableEdit(this)">
+                <label>이메일</label>
+                <span>example@example.com</span>
+                <input type="text" value="example@example.com">
+            </div>
+            <div class="info-box" onclick="enableEdit(this)">
+                <label>직업</label>
+                <span>데이터 분석가</span>
+                <input type="text" value="데이터 분석가">
+            </div>
+            <div class="info-box" onclick="enableEdit(this)">
+                <label>관심분야</label>
+                <span>AI, 머신러닝</span>
+                <input type="text" value="AI, 머신러닝">
+            </div>
+            <div class="info-box" onclick="enableEditDropdown(this)">
+                <label>마케팅 정보 수신</label>
+                <span>미동의</span>
+                <select>
+                    <option value="동의">동의</option>
+                    <option value="미동의" selected>미동의</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function enableEdit(box) {
+            box.classList.add('editable');
+            const input = box.querySelector('input');
+            input.focus();
+        }
+
+        function enableEditDropdown(box) {
+            box.classList.add('editable');
+            const select = box.querySelector('select');
+            select.focus();
+        }
+
+        function saveChanges() {
+            const editableBoxes = document.querySelectorAll('.info-box.editable');
+            editableBoxes.forEach(box => {
+                const input = box.querySelector('input');
+                const select = box.querySelector('select');
+                const span = box.querySelector('span');
+
+                if (input) {
+                    span.textContent = input.value; // input 값을 span으로 저장
+                }
+
+                if (select) {
+                    span.textContent = select.value; // select 값을 span으로 저장
+                }
+
+                box.classList.remove('editable'); // 수정 종료
+            });
+
+            alert('변경 사항이 저장되었습니다!');
+            // 수정된 정보를 저장하고 mypage.html로 이동
+            window.location.href = 'mypage.html';
+        }
+    </script>
+</body>
+</html>
