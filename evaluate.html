@@ -86,6 +86,12 @@
             color: #333;
         }
 
+        .popup p {
+            font-size: 1rem;
+            color: #555;
+            margin-bottom: 15px;
+        }
+
         .popup label {
             font-size: 1rem;
             margin: 10px 0;
@@ -162,7 +168,8 @@
     <div id="overlay"></div>
     <div class="popup" id="popup">
         <h2>웹사이트 사용 경험 평가</h2>
-        <p>1점(전혀 그렇지 않다) → 5점(매우 그렇다))</p>
+        <p>안녕하세요! Truth Tap 기능을 5번 이상 이용해주셔서 정말 감사합니다😃<br>간단한 설문에 참여해주시면 더 나은 서비스를 제공하는 데 큰 도움이 됩니다!<br>
+        (1: 매우 아니다 5: 매우 그렇다)</p>
         <form>
             <label>1. 버튼과 링크를 넣는 박스를 찾는 것이 쉬웠나요?</label>
             <div class="rating">
@@ -201,7 +208,6 @@
     </div>
 
     <script>
-        // Simulate condition for 5+ uses
         const usageCount = 6; // Example count
         const popup = document.getElementById('popup');
         const overlay = document.getElementById('overlay');
